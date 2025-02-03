@@ -1,0 +1,36 @@
+def add_task(title):
+    conn = sqlite3.connect("tasks.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO tasks (title) VALUES (?)", (title,))
+    conn.commit()
+    conn.close()
+    print(f"Task '{title}' added successfully!")
+
+def view_tasks():
+    conn = sqlite3.connect("tasks.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM tasks")
+    tasks = cursor.fetchall()
+    conn.close()
+
+    if not tasks:
+        print("No tasks found!")
+    else:
+        for task in tasks:
+            print(f"{task[0]}. {task[1]} - {task[2]}")
+
+def update_task(task_id, status):
+    conn = sqlite3.connect("tasks.db")
+    cursor = conn.cursor()
+    cursor.execute("UPDATE tasks SET status = ? WHERE id = ?", (status, task_id))
+    conn.commit()
+    conn.close()
+    print(f"Task {task_id} updated to {status}!")
+
+def delete_task(task_id):
+    conn = sqlite3.connect("tasks.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+    conn.commit()
+    conn.close()
+    print(f"Task {task_id} deleted successfully!")
